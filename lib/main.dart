@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:yugen/screens/authentication.dart';
-import 'package:yugen/screens/home.dart';
+import 'package:yugen/routes/auth_guard.dart';
+import 'package:yugen/routes/router.gr.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
 
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  final _appRouter = AppRouter(authGuard: AuthGuard());
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +26,19 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return HomeApp();
         }
-        return HomeApp();
+        return Container();
       },
     );
   }
 
   Widget HomeApp() {
-    return MaterialApp(
-      title: 'Yugen',
+    return MaterialApp.router(
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         brightness: Brightness.dark,
       ),
-      home: AuthenticationScreen(),
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }
