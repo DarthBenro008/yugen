@@ -1,7 +1,13 @@
+// @dart=2.9
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yugen/routes/auth_guard.dart';
 import 'package:yugen/routes/router.gr.dart';
+import 'package:yugen/utils/colorGenerator.dart';
+
+import 'bloc/navigation_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +19,6 @@ class MyApp extends StatelessWidget {
 
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  final _appRouter = AppRouter(authGuard: AuthGuard());
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +37,26 @@ class MyApp extends StatelessWidget {
   }
 
   Widget HomeApp() {
-    return MaterialApp.router(
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        brightness: Brightness.dark,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NavigationBloc>(
+          create: (BuildContext context) => NavigationBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Yugen App',
+        theme: ThemeData(
+          fontFamily: 'Worksans',
+          brightness: Brightness.light,
+          primarySwatch: createMaterialColor(Color(0xFF4454DE)),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        builder: ExtendedNavigator<AppRouter>(
+          guards: [AuthGuard()],
+          router: AppRouter(),
+          initialRoute: Routes.rootScreen,
+        ),
       ),
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }

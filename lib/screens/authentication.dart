@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:yugen/repository/authRepository.dart';
 import 'package:yugen/routes/router.gr.dart';
-import 'package:yugen/screens/home.dart';
 
 class AuthenticationPage extends StatefulWidget {
   @override
@@ -18,19 +17,40 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       body: SafeArea(
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Auth"),
+              Container(
+                height: 300,
+                color: Colors.amber,
+              ),
+              Text("One Tap Login and setup!"),
+              SizedBox(
+                height: 40,
+              ),
               ElevatedButton(
                 onPressed: () async {
                   User? user =
                       await Authentication.signInWithGoogle(context: context);
                   if (user != null) {
-                    context.router.push(HomeRoute());
+                    ExtendedNavigator.root.popAndPush(Routes.homeScreen);
                   }
                 },
-                child: Text("Google Sign In"),
+                child: Container(
+                  color: Color(0XFFEA606E),
+                  width: 200,
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Text("Get Started with"),
+                      Spacer(),
+                      Icon(
+                        Icons.g_translate,
+                        size: 35,
+                      )
+                    ],
+                  ),
+                ),
               )
             ],
           ),

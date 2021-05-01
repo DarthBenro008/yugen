@@ -3,15 +3,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yugen/routes/router.gr.dart';
 
-class AuthGuard extends AutoRouteGuard {
+class AuthGuard extends RouteGuard {
   @override
-  Future<bool> canNavigate(
-      List<PageRouteInfo> pendingRoutes, StackRouter router) async {
-    print("sup");
-    if (FirebaseAuth.instance.currentUser == null) {
-      router.root.push(AuthenticationRoute());
-      return false;
+  Future<bool> canNavigate(ExtendedNavigatorState navigator, String routeName,
+      Object arguments) async {
+    print(FirebaseAuth.instance.currentUser);
+    if (FirebaseAuth.instance.currentUser != null) {
+      return true;
     }
-    return true;
+    navigator.root.push(Routes.authScreen);
+    return false;
   }
 }
