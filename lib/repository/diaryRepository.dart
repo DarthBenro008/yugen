@@ -1,29 +1,30 @@
+import 'package:yugen/models/diaryModel.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yugen/models/todoModel.dart';
 
-abstract class TodoRepository {
-  Future<int> addTodo(TodoModel todoModel);
+abstract class DiaryRepository {
+  Future<int> addTodo(DiaryModel diaryModel);
 
-  Future<List<TodoModel>> readModels();
+  Future<List<DiaryModel>> readModels();
 
-  Future<bool> updateTodo(TodoModel todoModel);
+  Future<bool> updateTodo(DiaryModel diaryModel);
 
-  Future<bool> removeTodo(TodoModel todoModel);
+  Future<bool> removeTodo(DiaryModel diaryModel);
 
-  Stream<List<TodoModel>> listenTodos();
+  Stream<List<DiaryModel>> listenTodos();
 }
 
-class TodoRepositoryImpl extends TodoRepository {
-  final _todos = StreamController<List<TodoModel>>();
+class DiaryRepositoryImpl extends DiaryRepository {
+  final _todos = StreamController<List<DiaryModel>>();
 
   Future<Database> database() async {
     return openDatabase(
-      join(await getDatabasesPath(), 'todos.db'),
+      join(await getDatabasesPath(), 'diary.db'),
       onCreate: (db, version) async {
         await db.execute(
-          "CREATE TABLE todos(uniqueId INTEGER PRIMARY KEY AUTOINCREMENT, taskName TEXT, note TEXT, deadlineTaskTime TEXT, epochTime INTEGER, isCompleted INTEGER, filename TEXT)",
+          "CREATE TABLE diary(uniqueId INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, note TEXT, listOfFiles TEXT, epochTime INTEGER, filename TEXT)",
         );
       },
       version: 1,
@@ -31,12 +32,12 @@ class TodoRepositoryImpl extends TodoRepository {
   }
 
   @override
-  Future<int> addTodo(TodoModel todoModel) async {
+  Future<int> addTodo(DiaryModel diaryModel) async {
     final Database db = await database();
     try {
       int insertedId = await db.insert(
-        'todos',
-        todoModel.toMap(),
+        'diary',
+        diaryModel.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       refresh();
@@ -47,21 +48,20 @@ class TodoRepositoryImpl extends TodoRepository {
   }
 
   @override
-  Future<List<TodoModel>> readModels() async {
+  Future<List<DiaryModel>> readModels() async {
     try {
       final Database db = await database();
       final List<Map<String, dynamic>> maps =
-          await db.query('todos', orderBy: "uniqueId DESC");
+          await db.query('diary', orderBy: "uniqueId DESC");
       print(maps);
       return List.generate(maps.length, (i) {
-        return TodoModel(
+        return DiaryModel(
           epochTime: maps[i]['epochTime'],
-          filename: maps[i]['filename'],
+          fileName: maps[i]['fileName'],
           uniqueId: maps[i]['uniqueId'],
           note: maps[i]['note'],
-          deadlineTaskTime: maps[i]['deadlineTaskTime'],
-          isCompleted: maps[i]['isCompleted'],
-          taskName: maps[i]['taskName'],
+          listOfFiles: maps[i]['listOfFiles'],
+          title: maps[i]['title'],
         );
       });
     } catch (e) {
@@ -71,13 +71,13 @@ class TodoRepositoryImpl extends TodoRepository {
   }
 
   @override
-  Future<bool> removeTodo(TodoModel todoModel) async {
+  Future<bool> removeTodo(DiaryModel diaryModel) async {
     final Database db = await database();
     try {
       await db.delete(
-        'todos',
+        'diary',
         where: "uniqueId = ?",
-        whereArgs: [todoModel.uniqueId],
+        whereArgs: [diaryModel.uniqueId],
       );
       refresh();
       return true;
@@ -87,14 +87,14 @@ class TodoRepositoryImpl extends TodoRepository {
   }
 
   @override
-  Future<bool> updateTodo(TodoModel todoModel) async {
+  Future<bool> updateTodo(DiaryModel diaryModel) async {
     final Database db = await database();
     try {
       await db.update(
-        'todos',
-        todoModel.toMap(),
+        'diary',
+        diaryModel.toMap(),
         where: "uniqueId = ?",
-        whereArgs: [todoModel.uniqueId],
+        whereArgs: [diaryModel.uniqueId],
       );
       refresh();
       return true;
@@ -104,10 +104,10 @@ class TodoRepositoryImpl extends TodoRepository {
   }
 
   void refresh() async {
-    final fetchCurrentBills = await readModels();
-    _todos.add(fetchCurrentBills);
+    final fetchCurrentDiary = await readModels();
+    _todos.add(fetchCurrentDiary);
   }
 
   @override
-  Stream<List<TodoModel>> listenTodos() => _todos.stream;
+  Stream<List<DiaryModel>> listenTodos() => _todos.stream;
 }

@@ -4,15 +4,18 @@ class TodoModel {
   final String taskName;
   final int isCompleted;
   final int deadlineTaskTime;
+  final String filename;
   final String note;
 
-  TodoModel(
-      {required this.uniqueId,
-      required this.taskName,
-      required this.note,
-      required this.deadlineTaskTime,
-      required this.epochTime,
-      required this.isCompleted});
+  TodoModel({
+    required this.uniqueId,
+    required this.taskName,
+    required this.note,
+    required this.deadlineTaskTime,
+    required this.epochTime,
+    required this.isCompleted,
+    required this.filename,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -21,7 +24,8 @@ class TodoModel {
       'note': note,
       'deadlineTaskTime': deadlineTaskTime,
       'epochTime': epochTime,
-      "isCompleted": isCompleted
+      "isCompleted": isCompleted,
+      'filename': filename,
     };
   }
 }
