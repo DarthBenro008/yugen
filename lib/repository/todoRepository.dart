@@ -104,8 +104,8 @@ class TodoRepositoryImpl extends TodoRepository {
   }
 
   void refresh() async {
-    final fetchCurrentBills = await readModels();
-    _todos.add(fetchCurrentBills);
+    final fetchCurrenttodos = await readModels();
+    _todos.add(fetchCurrenttodos);
   }
 
   @override
