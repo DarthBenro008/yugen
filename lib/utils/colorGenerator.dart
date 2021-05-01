@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 MaterialColor createMaterialColor(Color color) {
   List strengths = <double>[.05];
-  Map<int,Color> swatch = <int, Color>{};
+  Map<int, Color> swatch = <int, Color>{};
   final int r = color.red, g = color.green, b = color.blue;
 
   for (int i = 1; i < 10; i++) {

@@ -33,6 +33,9 @@ dependencies:
   flutter_bloc: ^6.1.1
   equatable: ^1.2.5
   auto_size_text: ^2.1.0
+  dio: ^4.0.0
+  shared_preferences: ^2.0.5
+
 
 
 
