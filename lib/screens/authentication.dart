@@ -18,37 +18,43 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         child: Center(
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 300,
-                color: Colors.amber,
+                child: Image.asset(
+                  'assets/auth.png',
+                  fit: BoxFit.fitWidth,
+                ),
               ),
-              Text("One Tap Login and setup!"),
               SizedBox(
                 height: 40,
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  User? user =
-                      await Authentication.signInWithGoogle(context: context);
-                  if (user != null) {
-                    ExtendedNavigator.root.popAndPush(Routes.homeScreen);
-                  }
-                },
-                child: Container(
-                  color: Color(0XFFEA606E),
-                  width: 200,
-                  height: 60,
-                  child: Row(
-                    children: [
-                      Text("Get Started with"),
-                      Spacer(),
-                      Icon(
-                        Icons.g_translate,
-                        size: 35,
-                      )
-                    ],
+              Container(
+                alignment: Alignment.center,
+                child: Text("One Tap Login and setup!"),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 80),
+                width: 100,
+                height: 100,
+                child: InkWell(
+                  onTap: () async {
+                    User? user =
+                        await Authentication.signInWithGoogle(context: context);
+                    if (user != null) {
+                      ExtendedNavigator.root.popAndPush(Routes.rootScreen);
+                    }
+                  },
+                  child: Container(
+                    width: 100,
+                    height: 300,
+                    child: Image.asset(
+                      'assets/gsign.png',
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ),
               )

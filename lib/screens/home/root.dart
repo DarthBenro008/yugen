@@ -10,7 +10,7 @@ class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white30, //or set color with: Color(0xFF0000FF)
+      statusBarColor: Colors.black, //or set color with: Color(0xFF0000FF)
     ));
 
     final bloc = BlocProvider.of<NavigationBloc>(context);
@@ -21,7 +21,7 @@ class Root extends StatelessWidget {
           return WillPopScope(
             onWillPop: bloc.onWillPop,
             child: Scaffold(
-              backgroundColor: Color(0xFF5A8FDF),
+              // backgroundColor: Color(0xFF5A8FDF),
               body: SafeArea(
                 child: IndexedStack(
                   index: state,
@@ -42,6 +42,7 @@ class Root extends StatelessWidget {
                 ),
               ),
               bottomNavigationBar: Container(
+                color: Color(0xFF5A8FDF),
                 child: BottomNavigationBar(
                   unselectedItemColor: Colors.white38,
                   backgroundColor: Colors.transparent,

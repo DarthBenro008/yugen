@@ -2,7 +2,7 @@ class TodoModel {
   final int uniqueId;
   final int epochTime;
   final String taskName;
-  final int isCompleted;
+  bool isCompleted;
   final int deadlineTaskTime;
   final String filename;
   final String note;
